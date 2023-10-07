@@ -1,0 +1,20 @@
+/* body{
+    max-width: 1280px;
+} */
+.gallery{
+display: flex;
+flex-wrap: wrap;
+
+}
+img{
+    width: 300px;
+}
+.photo-card{
+    display: block;
+}
+.info{
+    display: flex;
+}
+.hide{
+    display: none;
+}
