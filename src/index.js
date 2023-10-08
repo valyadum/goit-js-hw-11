@@ -19,7 +19,7 @@ loadMoreBtn.classList.add('hide');
 function getImage(event) {
     event.preventDefault();
     loadMoreBtn.disabled = true;
-    
+    console.log(newsApiService.fetchArticles().totalPage)
     newsApiService.query = event.currentTarget.elements.searchQuery.value;
     newsApiService.resetPage();
     newsApiService.fetchArticles().then((hits) => {
@@ -78,7 +78,7 @@ function createMarkup(hits) {
         }).join('');
     
 }
-//todo  знайти як записуються всі дані з допомогою масиву та записати їх в картку,
+//todo  додати перевірку на кількість сторінок, та прибирати кнопку при їх закінчені
 // async function getImage(e, options) {
 //     e.preventDefault();
 //     console.log('hi');

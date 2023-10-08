@@ -5,6 +5,7 @@ export default class NewsApiService {
     {
         this.searchQuery = '';
         this.page = 1;
+        this.totalPage;
     }
     fetchArticles() {
         const BASE_URL = 'https://pixabay.com/api/';
@@ -22,6 +23,8 @@ export default class NewsApiService {
             .then(response => response.data)
             .then((data) => {
                 this.page += 1;
+                this.totalPage = (data.totalHits / params.per_page).toFixed(0);
+                // console.log(this.totalPage);
                 return data.hits;
             })
             .catch(error => console.log(error))
@@ -34,5 +37,6 @@ export default class NewsApiService {
     }
     set query(newQuery) {
         this.searchQuery = newQuery;
+
     }
 }
