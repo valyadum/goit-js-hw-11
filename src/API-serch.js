@@ -16,7 +16,7 @@ export default class NewsApiService {
             orientation: 'horizontal',
             safesearch: true,
             page:`${this.page}`,
-            per_page: 3
+            per_page: 40
         }
         console.log(this.searchQuery);
         return axios.get(`${BASE_URL}`, { params })
