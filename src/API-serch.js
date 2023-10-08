@@ -23,8 +23,10 @@ export default class NewsApiService {
             .then(response => response.data)
             .then((data) => {
                 this.page += 1;
-                this.totalPage = (data.totalHits / params.per_page).toFixed(0);
-                // console.log(this.totalPage);
+                const total = data.totalHits;
+                const perPage = params.per_page;
+                // console.log(total, perPage);
+                this.getTotalPage(total, perPage);
                 return data.hits;
             })
             .catch(error => console.log(error))
@@ -38,5 +40,11 @@ export default class NewsApiService {
     set query(newQuery) {
         this.searchQuery = newQuery;
 
+    }
+    getTotalPage(total,perPage) {
+        this.totalPage = Number((total/ perPage).toFixed(0));
+        console.log(this.totalPage);
+        return this.totalPage;
+                
     }
 }

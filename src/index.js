@@ -19,7 +19,6 @@ loadMoreBtn.classList.add('hide');
 function getImage(event) {
     event.preventDefault();
     loadMoreBtn.disabled = true;
-    console.log(newsApiService.fetchArticles().totalPage)
     newsApiService.query = event.currentTarget.elements.searchQuery.value;
     newsApiService.resetPage();
     newsApiService.fetchArticles().then((hits) => {
@@ -35,6 +34,8 @@ function getImage(event) {
         loadMoreBtn.classList.remove('hide');
         loadMoreBtn.disabled = false;   
         }
+        console.log(newsApiService.getTotalPage());
+
     });
    
     
