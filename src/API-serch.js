@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 export default class NewsApiService {
     constructor()
@@ -26,11 +27,18 @@ export default class NewsApiService {
                 const total = data.totalHits;
                 const perPage = params.per_page;
                 this.totalPage = Number((total / perPage).toFixed(0));
-                if (this.page < this.totalPage) {
-                    return data.hits;
-                }
-                else {
-                    return console.log("We're sorry, but you've reached the end of search results.");
+                if (data.hits.length === 0 || this.query.trim() === '') {
+                    return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+                } else {
+                    if (this.page < this.totalPage) {
+                        Notify.success(`Hooray! We found ${total} images.`);
+                    
+                      
+                        return data.hits;
+                    }
+                    else {
+                        return Notify.failure("We're sorry, but you've reached the end of search results.");
+                    }
                 }
                 // console.log(total, perPage);
                 // this.getTotalPage(total, perPage);
@@ -48,13 +56,13 @@ export default class NewsApiService {
         this.searchQuery = newQuery;
 
     }
-    getTotalPage(total,perPage) {
+    // getTotalPage(total,perPage) {
         
-        console.log(this.totalPage);
-        if (this.page > this.totalPage) {
-            return data.hits; 
-        }
-        return console.log("We're sorry, but you've reached the end of search results.");
+    //     console.log(this.totalPage);
+    //     if (this.page < this.totalPage) {
+    //         return data.hits; 
+    //     }
+    //     return console.log("We're sorry, but you've reached the end of search results.");
                 
-    }
+    // }
 }

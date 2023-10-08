@@ -1,5 +1,6 @@
 
 import NewsApiService from "./API-serch";
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
 
@@ -23,17 +24,18 @@ function getImage(event) {
     newsApiService.resetPage();
     newsApiService.fetchArticles().then((hits) => {
         
-        if (newsApiService.query.trim() === ''|| hits.length === 0) {
-            loadMoreBtn.classList.add('hide');
-            clearGallery();
-            return alert("Sorry, there are no images matching your search query. Please try again.")
-        }
-        else {
+        // if (newsApiService.query.trim() === '' ) {
+        //     loadMoreBtn.classList.add('hide');
+        //     clearGallery();
+        //     return  Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+        //     // alert("Sorry, there are no images matching your search query. Please try again.")
+        // }
+        // else {
          clearGallery();
         appendMarkup(hits);
         loadMoreBtn.classList.remove('hide');
         loadMoreBtn.disabled = false;   
-        }
+        // }
         // console.log(newsApiService.getTotalPage());
 
     });
