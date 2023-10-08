@@ -23,9 +23,9 @@ function getImage(event) {
     newsApiService.resetPage();
     newsApiService.fetchArticles().then((hits) => {
         
-        if (newsApiService.query.trim() === '' || hits.length === 0) {
+        if (newsApiService.query.trim() === ''|| hits.length === 0) {
             loadMoreBtn.classList.add('hide');
-            clearGallery;
+            clearGallery();
             return alert("Sorry, there are no images matching your search query. Please try again.")
         }
         else {
@@ -34,7 +34,7 @@ function getImage(event) {
         loadMoreBtn.classList.remove('hide');
         loadMoreBtn.disabled = false;   
         }
-        console.log(newsApiService.getTotalPage());
+        // console.log(newsApiService.getTotalPage());
 
     });
    

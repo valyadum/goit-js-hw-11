@@ -25,9 +25,16 @@ export default class NewsApiService {
                 this.page += 1;
                 const total = data.totalHits;
                 const perPage = params.per_page;
+                this.totalPage = Number((total / perPage).toFixed(0));
+                if (this.page < this.totalPage) {
+                    return data.hits;
+                }
+                else {
+                    return console.log("We're sorry, but you've reached the end of search results.");
+                }
                 // console.log(total, perPage);
-                this.getTotalPage(total, perPage);
-                return data.hits;
+                // this.getTotalPage(total, perPage);
+               
             })
             .catch(error => console.log(error))
     }
@@ -42,9 +49,12 @@ export default class NewsApiService {
 
     }
     getTotalPage(total,perPage) {
-        this.totalPage = Number((total/ perPage).toFixed(0));
+        
         console.log(this.totalPage);
-        return this.totalPage;
+        if (this.page > this.totalPage) {
+            return data.hits; 
+        }
+        return console.log("We're sorry, but you've reached the end of search results.");
                 
     }
 }
