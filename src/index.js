@@ -1,5 +1,5 @@
 
-import NewsApiService from "./api-serch.js";
+import NewsApiService from "./API-serch";
 
 
 
