@@ -23,7 +23,7 @@ export default class NewsApiService {
         return axios.get(`${BASE_URL}`, { params })
             .then(response => response.data)
             .then((data) => {
-                this.page += 1;
+             
                 const total = data.totalHits;
                 const perPage = params.per_page;
                 this.totalPage = Number((total / perPage).toFixed(0));
@@ -31,15 +31,16 @@ export default class NewsApiService {
                     return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
                 } else {
                     if (this.page < this.totalPage) {
-                        Notify.success(`Hooray! We found ${total} images.`);
-                    
-                      
+                        if (this.page === 1)
+                        { Notify.success(`Hooray! We found ${total} images.`) }
+                        this.page += 1;
                         return data.hits;
                     }
                     else {
                         return Notify.failure("We're sorry, but you've reached the end of search results.");
                     }
                 }
+                
                 // console.log(total, perPage);
                 // this.getTotalPage(total, perPage);
                

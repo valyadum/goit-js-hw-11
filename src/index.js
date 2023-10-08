@@ -1,14 +1,13 @@
 
 import NewsApiService from "./API-serch";
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 
-
-
-const BASE_URL = 'https://pixabay.com/api/';
 
 const form = document.querySelector('.search-form');
 const loadMoreBtn = document.querySelector('.load-more');
-const gallery = document.querySelector('.gallery')
+const gallery = document.querySelector('.gallery');
+const lightbox = new SimpleLightbox('.gallery a');
 
 const newsApiService = new NewsApiService();
 
@@ -23,25 +22,20 @@ function getImage(event) {
     newsApiService.query = event.currentTarget.elements.searchQuery.value;
     newsApiService.resetPage();
     newsApiService.fetchArticles().then((hits) => {
-        
-        // if (newsApiService.query.trim() === '' ) {
-        //     loadMoreBtn.classList.add('hide');
-        //     clearGallery();
-        //     return  Notify.failure("Sorry, there are no images matching your search query. Please try again.");
-        //     // alert("Sorry, there are no images matching your search query. Please try again.")
-        // }
-        // else {
-         clearGallery();
-        appendMarkup(hits);
-        loadMoreBtn.classList.remove('hide');
-        loadMoreBtn.disabled = false;   
-        // }
-        // console.log(newsApiService.getTotalPage());
-
+        if (!hits) {
+            loadMoreBtn.classList.add('hide');
+            loadMoreBtn.disabled = true;
+            gallery.innerHTML = '';
+            return;
+        }
+        else {
+            clearGallery();
+            appendMarkup(hits);
+            lightbox.refresh();
+            loadMoreBtn.classList.remove('hide');
+            loadMoreBtn.disabled = false;
+        }
     });
-   
-    
-
 }
 function clearGallery() {
     gallery.innerHTML = '';
@@ -52,34 +46,42 @@ function appendMarkup(hits) {
 function loadMore() {
     loadMoreBtn.disabled = true;
     newsApiService.fetchArticles().then((hits) => {
+        if (!hits) {
+            loadMoreBtn.classList.add('hide');
+            loadMoreBtn.disabled = true;
+            return;
+        }
         appendMarkup(hits);
+        lightbox.refresh();
         loadMoreBtn.disabled = false;
     });
 }
 function createMarkup(hits) {
-   return hits.map(
+    return hits?.map(
         ({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
             return `
                 <div class="photo-card">
-                   <img src='${webformatURL}' alt="${tags}" loading="lazy" />
+                <a class="gallery__link" href="${largeImageURL}">
+                   <img class= "image" src='${webformatURL}' alt="${tags}" loading="lazy" />
+                   </a>
                      <div class="info">
                      <p class="info-item">
-                       <b>Likes ${likes}</b>
+                       <b>Likes <span class="number"> ${likes}</span></b>
                      </p>
                      <p class="info-item">
-                      <b>Views ${views}</b>
+                      <b>Views<br>  <span class="number"> ${views}</span></b>
                     </p>
                     <p class="info-item">
-                      <b>Comments ${comments}</b>
+                      <b>Comments <span class="number"> ${comments}</span> </b>
                     </p>
                     <p class="info-item">
-                      <b>Downloads ${downloads}</b>
+                      <b>Downloads <span class="number"> ${downloads}</span></b>
                     </p>
                     </div>
                 </div>
             `
         }).join('');
-    
+
 }
 //todo  додати перевірку на кількість сторінок, та прибирати кнопку при їх закінчені
 // async function getImage(e, options) {
