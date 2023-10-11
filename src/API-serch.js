@@ -5,7 +5,7 @@ export default class NewsApiService {
     constructor() {
         this.searchQuery = '';
         this.page = 1;
-        // this.totalPage = 0;
+        //  this.totalPage = 0;
     }
   async fetchArticles() {
        const BASE_URL = 'https://pixabay.com/api/';
@@ -60,9 +60,9 @@ export default class NewsApiService {
         this.searchQuery = newQuery;
 
     }
-    // getTotalPage(hits,totalHits) {
-    //     this.totalPage = Number((totalHits / perPage).toFixed(0));
-    //     return this.totalPage;
+    // getTotalPage(hits) {
+    //     this.totalPage += hits.length;
+        
     // }
     resetTotalPage() {
         this.totalPage = 0;
