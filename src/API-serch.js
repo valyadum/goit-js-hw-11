@@ -4,12 +4,13 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 export default class NewsApiService {
     constructor() {
         this.searchQuery = '';
-        this.page = 1;
+        this.page = 0;
+        this.perPage;
         //  this.totalPage = 0;
     }
   async fetchArticles() {
        const BASE_URL = 'https://pixabay.com/api/';
-       const params = new URLSearchParams({
+       const params = {
            key: '39875248-e66a9da82da2239ad899e3cdb',
            q: `${this.searchQuery}`,
            image_type: 'photo',
@@ -17,12 +18,13 @@ export default class NewsApiService {
            safesearch: true,
            page: `${this.page}`,
            per_page: 40,
-       });
+       };
+      
        try {
            const response = await axios.get(`${BASE_URL}`, { params });
            this.page += 1;
-        //    const perPage = params.per_page;
-                
+            this.perPage = params.per_page;
+            // console.log(this.perPage);    
            return response.data;
        }
        catch (error) {
@@ -60,10 +62,13 @@ export default class NewsApiService {
         this.searchQuery = newQuery;
 
     }
-    // getTotalPage(hits) {
-    //     this.totalPage += hits.length;
+    getTotalPage(totalHits) {
+        this.totalPage += hits.length;
+    //    this.totalPage = Math.ceil(totalHits / 40);
+    //     console.log(this.totalPage);
+    //     return this.totalPage;
         
-    // }
+    }
     resetTotalPage() {
         this.totalPage = 0;
     }

@@ -8,8 +8,11 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 const form = document.querySelector('.search-form');
 const loadMoreBtn = document.querySelector('.load-more');
 const gallery = document.querySelector('.gallery');
-const lightbox = new SimpleLightbox('.gallery a');
-const loadMoreField =document.querySelector('.load-div')
+const lightbox = new SimpleLightbox('.gallery a', {
+    captionData: 'alt',
+});
+const loadMoreField = document.querySelector('.load-div')ж
+const per_page = 40;
 
 const newsApiService = new NewsApiService();
 const optionsForObserver = {
@@ -75,24 +78,21 @@ function appendMarkup(hits) {
 function loadMore() {
     // loadMoreBtn.disabled = true;
     newsApiService.fetchArticles()
-        .then(({ hits, totalHits}) => {
-            const totalPage = Number((totalHits / 40).toFixed(0));
-            if (newsApiService.page < totalPage) {
-                console.log("norm");
-                // if (totalHits === hits.length) {
-                //     observer.unobserve(loadMoreField);
-                //     return Notify.failure("We're sorry, but you've reached the end of search results.");
-                // }
-                appendMarkup(hits);
-                lightbox.refresh();
-                // loadMoreBtn.disabled = false;
-            } else {
+        .then(({ hits, totalHits }) => {
+            const totalPage = Math.ceil(totalHits / per_page);
+            if (newsApiService.page > totalPage) {
                 console.log("many");
                 // loadMoreBtn.classList.add('hide');
                 // loadMoreBtn.disabled = true;
                 observer.unobserve(loadMoreField);
                 return Notify.failure("We're sorry, but you've reached the end of search results.");
 
+                
+            } else {
+                console.log("norm");
+                appendMarkup(hits);
+                lightbox.refresh();
+                // loadMoreBtn.disabled = false;
             }
         })
         .catch((error) => { console.log(error) });
