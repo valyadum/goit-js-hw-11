@@ -51,11 +51,12 @@ input {
     height: 40px;
     border-radius: 5px;
     border: 1px solid #E7E9FC;
-}
-
-input::placeholder {
     padding-left: 10px;
 }
+
+/* input::placeholder {
+    padding-left: 10px;
+} */
 
 .search-btn {
     border-radius: 5px;
