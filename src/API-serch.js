@@ -5,7 +5,7 @@ export default class NewsApiService {
     constructor() {
         this.searchQuery = '';
         this.page = 1;
-        this.totalPage = 0;
+        // this.totalPage = 0;
     }
   async fetchArticles() {
        const BASE_URL = 'https://pixabay.com/api/';
@@ -18,10 +18,11 @@ export default class NewsApiService {
            page: `${this.page}`,
            per_page: 40,
        });
-       console.log(this.searchQuery);
        try {
            const response = await axios.get(`${BASE_URL}`, { params });
            this.page += 1;
+        //    const perPage = params.per_page;
+                
            return response.data;
        }
        catch (error) {
@@ -59,9 +60,10 @@ export default class NewsApiService {
         this.searchQuery = newQuery;
 
     }
-    getTotalPage(hits) {
-        this.totalPage = hits.length;
-    }
+    // getTotalPage(hits,totalHits) {
+    //     this.totalPage = Number((totalHits / perPage).toFixed(0));
+    //     return this.totalPage;
+    // }
     resetTotalPage() {
         this.totalPage = 0;
     }

@@ -48,7 +48,7 @@ function getImage(event) {
                 clearGallery();
                 observer.observe(loadMoreField);
                 appendMarkup(hits);
-                newsApiService.getTotalPage(hits);
+                // newsApiService.getTotalPage(hits);
                 Notify.success(`Hooray! We found ${totalHits} images.`)
                 lightbox.refresh();
                 // loadMoreBtn.classList.remove('hide');
@@ -75,8 +75,9 @@ function appendMarkup(hits) {
 function loadMore() {
     // loadMoreBtn.disabled = true;
     newsApiService.fetchArticles()
-        .then(({ hits, totalHits }) => {
-            if (hits.length < totalHits) {
+        .then(({ hits, totalHits}) => {
+            const totalPage = Number((totalHits / 40).toFixed(0));
+            if (newsApiService.page < totalPage) {
                 console.log("norm");
                 // if (totalHits === hits.length) {
                 //     observer.unobserve(loadMoreField);
