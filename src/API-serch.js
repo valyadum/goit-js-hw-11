@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
+const per_page = 40;
 export default class NewsApiService {
     constructor() {
         this.searchQuery = '';
@@ -17,15 +18,15 @@ export default class NewsApiService {
            orientation: 'horizontal',
            safesearch: true,
            page: `${this.page}`,
-           per_page: 40,
+           per_page: per_page,
        };
-      
-       try {
+      try {
            const response = await axios.get(`${BASE_URL}`, { params });
            this.page += 1;
-            this.perPage = params.per_page;
-            // console.log(this.perPage);    
-           return response.data;
+          this.perPage = params.per_page;
+          const p = this.perPage;
+          const data = response.data;
+           return {data, p}
        }
        catch (error) {
            console.log(error);

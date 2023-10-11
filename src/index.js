@@ -11,8 +11,7 @@ const gallery = document.querySelector('.gallery');
 const lightbox = new SimpleLightbox('.gallery a', {
     captionData: 'alt',
 });
-const loadMoreField = document.querySelector('.load-div')ж
-const per_page = 40;
+const loadMoreField = document.querySelector('.load-div');
 
 const newsApiService = new NewsApiService();
 const optionsForObserver = {
@@ -33,13 +32,16 @@ function getImage(event) {
     newsApiService.query = event.currentTarget.elements.searchQuery.value;
     newsApiService.resetPage();
     newsApiService.resetTotalPage();
-   
+
     if (!newsApiService.query.trim()) {
         // loadMoreBtn.classList.add('hide');
         gallery.innerHTML = '';
         return Notify.failure("Sorry, there are no images matching your search query. Please try again.");
     }
     newsApiService.fetchArticles()
+        .then((info) => {
+            return info.data;
+        })
         .then(({ hits, totalHits }) => {
             if (!hits.length) {
                 // loadMoreBtn.classList.add('hide');
@@ -66,7 +68,7 @@ function getImage(event) {
         .catch((error) => { console.log(error) }).finally(
             form.reset()
         );
-    observer.unobserve(loadMoreField); 
+    observer.unobserve(loadMoreField);
 }
 function clearGallery() {
     gallery.innerHTML = '';
@@ -74,28 +76,40 @@ function clearGallery() {
 function appendMarkup(hits) {
     gallery.insertAdjacentHTML('beforeend', createMarkup(hits));
 }
+let perPage;
 
 function loadMore() {
+    if (!newsApiService.query.trim()) {
+        // loadMoreBtn.classList.add('hide');
+        form.reset();
+        return;
+    }
     // loadMoreBtn.disabled = true;
     newsApiService.fetchArticles()
-        .then(({ hits, totalHits }) => {
-            const totalPage = Math.ceil(totalHits / per_page);
-            if (newsApiService.page > totalPage) {
-                console.log("many");
-                // loadMoreBtn.classList.add('hide');
-                // loadMoreBtn.disabled = true;
-                observer.unobserve(loadMoreField);
-                return Notify.failure("We're sorry, but you've reached the end of search results.");
-
-                
-            } else {
-                console.log("norm");
-                appendMarkup(hits);
-                lightbox.refresh();
-                // loadMoreBtn.disabled = false;
-            }
+        .then((info) => {
+            perPage = info.p;
+            return info.data
         })
-        .catch((error) => { console.log(error) });
+        .then(({ hits, totalHits }) => {
+                console.log(perPage);
+                const totalPage = Math.ceil(totalHits / perPage);
+                if (newsApiService.page > totalPage) {
+                    console.log("many");
+                    // loadMoreBtn.classList.add('hide');
+                    // loadMoreBtn.disabled = true;
+                    observer.unobserve(loadMoreField);
+                    return Notify.failure("We're sorry, but you've reached the end of search results.");
+
+
+                } else {
+                    console.log("norm");
+                    appendMarkup(hits);
+                    lightbox.refresh();
+                    // loadMoreBtn.disabled = false;
+                }
+        })
+        .catch((error) => { console.log(error) })
+        
 }
 function createMarkup(hits) {
     return hits?.map(
